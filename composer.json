@@ -1,0 +1,16 @@
+{
+  "name": "janmas/encryption",
+  "description": "加解密小工具",
+  "authors": [
+    {
+      "name": "janmas",
+      "email": "janmas-cromwell@outlook.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "encryption\\": "src"
+    }
+  }
+}
