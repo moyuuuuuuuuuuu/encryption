@@ -30,27 +30,29 @@ class Encryption
 		abs($offset) ?? rand(1, 15);
 
 		for ($i = 0; $i < $len; $i++) {
-			$ascii = ord($original[$i]) + $offset;
-			$encrypt .= chr($ascii);
-		}
+            $ascii = ord($original[$i]) + $offset;
+            $encrypt .= chr($ascii);
+        }
 
-		$eq = $offset * $offset;
-		$length = strlen($eq);
+        $eq = $offset * $offset;
+        $length = strlen($eq);
 
-		$base = base64_encode($encrypt);
-		$base = str_replace(array('+', '/'), array('-', '_'), $base);
+        $base = base64_encode($encrypt);
+        $base = str_replace(array('+', '/'), array('-', '_'), $base);
 
-		$prefix = self::$tagMap[$length];
-		if ($length % rand(2, 3) == 0) {
-			$prefix = strtoupper($prefix);
-		}
+        $prefix = self::$tagMap[$length];
+        if ($length % rand(2, 3) == 0) {
+            $prefix = strtoupper($prefix);
+        }
 
-		if (substr($base, -1, 1) != '=') {
-			return $prefix . $base . $eq;
-		} else {
-			return $prefix . $eq . $base;
-		}
-	}
+        if (substr($base, -1, 1) != '=') {
+            $hash = $prefix . $base . $eq;
+        } else {
+            $hash = $prefix . $eq . $base;
+        }
+        $hash = str_replace('=', '@', $hash);
+        return $hash;
+    }
 
 	/**
 	 * 解密
@@ -62,8 +64,8 @@ class Encryption
 		if (empty($hash)) {
 			return $hash;
 		}
-
-		$eqLength = array_search(strtolower(substr($hash, 0, 1)), self::$tagMap);
+        $hash = str_replace('@', '=', $hash);
+        $eqLength = array_search(strtolower(substr($hash, 0, 1)), self::$tagMap);
 
 		if (substr($hash, -1, 1) != '=') {
 			$number = substr($hash, -($eqLength), $eqLength);
