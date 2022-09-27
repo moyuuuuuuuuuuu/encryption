@@ -27,7 +27,7 @@ class Encryption
 		}
 		$len = strlen($original);
 		$encrypt = '';
-		abs($offset) ?? rand(1, 15);
+        $offset = $offset ?? rand(1, 15);
 
 		for ($i = 0; $i < $len; $i++) {
             $ascii = ord($original[$i]) + $offset;
